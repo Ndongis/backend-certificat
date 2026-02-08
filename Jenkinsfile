@@ -29,6 +29,7 @@ pipeline {
     steps {
   
         sh """
+        fuser -k 8000/tcp || true
         docker compose down --remove-orphans
          docker compose down || true
         docker compose up -d --build
