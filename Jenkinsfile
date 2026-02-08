@@ -28,10 +28,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo '🧪 Lancement des tests unitaires...'
-                 sh """ docker compose down || true
-                  docker compose up -d --build 
-                  docker compose exec backend python manage.py test
-                  docker compose down """
+                 sh """ python manage.py test """
             }
         }
 
