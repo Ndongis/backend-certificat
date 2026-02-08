@@ -27,13 +27,14 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                echo '🧪 Lancement des tests unitaires...'
+                
+                 sh """ 
+                 echo '🧪 Lancement des tests unitaires...'
                 $env:POSTGRES_HOST = "localhost"
                 $env:POSTGRES_PORT = "5432"
                 $env:POSTGRES_DB = "certificatdb"
                 $env:POSTGRES_USER = "postgres"
                 $env:POSTGRES_PASSWORD = "1234"
-                 sh """ 
                  . venv/bin/activate
                  python manage.py test
                 """
