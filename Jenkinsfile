@@ -28,7 +28,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo '🧪 Lancement des tests unitaires...'
-                sh 'python3 manage.py test'
+                 sh """ . venv/bin/activate
+                  python manage.py test """
             }
         }
 
