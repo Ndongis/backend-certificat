@@ -33,15 +33,11 @@ pipeline {
         sh 'sleep 10'
 
         sh """
-        echo '🧪 Lancement des tests unitaires...'
-        export POSTGRES_HOST=db
-        export POSTGRES_PORT=5432
-        export POSTGRES_DB=certificatdb
-        export POSTGRES_USER=postgres
-        export POSTGRES_PASSWORD=n
-        
-        . venv/bin/activate
-        python manage.py test
+         docker compose down || true
+        docker compose up -d --build
+        docker compose exec backend python manage.py migrate
+        docker compose exec backend python manage.py test
+        docker compose down
         """
     }
 }
