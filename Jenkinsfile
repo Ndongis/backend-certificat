@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
-        IMAGE_NAME = 'elhadjsow/backend-certificat'
+        IMAGE_NAME = 'ndongis/backend-certificat'
         IMAGE_TAG = 'latest'
     }
 
