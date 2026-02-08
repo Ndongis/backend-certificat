@@ -18,7 +18,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installation des dépendances...'
-                sh 'pip3 install -r requirements.txt'
+                sh """ python3 -m venv venv
+                 . venv/bin/activate
+                  pip3 install --upgrade pip 
+                  pip3 install -r requirements.txt """
             }
         }
 
