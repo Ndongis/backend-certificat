@@ -33,7 +33,7 @@ pipeline {
         export POSTGRES_PORT=5432
         export POSTGRES_DB=certificatdb
         export POSTGRES_USER=postgres
-        export POSTGRES_PASSWORD= 
+        export POSTGRES_PASSWORD=n
         
         . venv/bin/activate
         python manage.py test
