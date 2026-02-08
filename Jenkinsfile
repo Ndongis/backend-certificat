@@ -27,6 +27,11 @@ pipeline {
 
       stage('Run Tests') {
     steps {
+        sh 'docker-compose up -d db'
+        
+        // 2. Laisse le temps à Postgres de démarrer (crucial !)
+        sh 'sleep 10'
+        
         sh """
         echo '🧪 Lancement des tests unitaires...'
         export POSTGRES_HOST=db
