@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB = credentials('dockerhub-credentials')
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
         IMAGE_NAME = 'ndongis/backend-certificat'
         IMAGE_TAG = 'latest'
     }
@@ -18,57 +18,58 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installation des dépendances...'
-                // Note: On installe ici pour flake8 ou l'IDE, mais les tests tourneront dans Docker
-                sh """
-                python3 -m venv venv 
+                sh """ python3 -m venv venv 
                 . venv/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
-                """
+                 pip install --upgrade pip
+                 pip install -r requirements.txt """
             }
         }
 
-        stage('Run Tests') {
+      stage('Run Tests') {
+    steps {
+  
+        sh """
+         docker compose down || true
+        docker compose up -d --build
+        docker compose exec backend python manage.py migrate
+        docker compose exec backend python manage.py test
+        docker compose down
+        """
+    }
+}
+
+        stage('Build Docker Image') {
             steps {
-                echo '🧪 Nettoyage et lancement des tests dans Docker...'
-                sh """
-                # 1. Arrêt complet pour libérer le port 8000 et 5432
-                docker compose down --remove-orphans
-                
-                # 2. Lancement des services en arrière-plan
-                docker compose up -d --build
-                
-                # 3. Attendre que la DB soit prête (Healthcheck)
-                echo "Waiting for database..."
-                sleep 15
-                
-                # 4. Exécuter les commandes DANS le conteneur (Réseau interne 'db' OK)
-                docker compose exec -T backend python manage.py migrate
-                docker compose exec -T backend python manage.py test
-                
-                # 5. Nettoyage après tests
-                docker compose down
-                """
+                echo '🐳 Construction de l’image Docker...'
+                sh 'docker build -t %IMAGE_NAME%:%IMAGE_TAG% .'
             }
         }
 
-        stage('Build & Push Docker Hub') {
+        stage('Push to Docker Hub') {
             steps {
-                echo '🐳 Push vers Docker Hub...'
-                // Utilisation de sh au lieu de powershell
-                sh """
-                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-                echo "${DOCKER_HUB_PSW}" | docker login -u "${DOCKER_HUB_USR}" --password-stdin
-                docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                echo '📤 Envoi de l’image vers Docker Hub...'
+                sh '''
+                echo $env:DOCKER_HUB_CREDENTIALS_PSW | docker login -u $env:DOCKER_HUB_CREDENTIALS_USR --password-stdin
+                docker push $env:IMAGE_NAME:$env:IMAGE_TAG
                 docker logout
-                """
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo '🚀 Déploiement avec Docker Compose...'
+                sh '''
+                docker pull $env:IMAGE_NAME:$env:IMAGE_TAG
+                docker-compose down
+                docker-compose up -d
+                '''
             }
         }
     }
 
     post {
         always {
-            sh 'docker compose down'
             echo 'Pipeline terminé ✅'
         }
         failure {
