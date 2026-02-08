@@ -29,7 +29,7 @@ pipeline {
     steps {
         sh """
         echo '🧪 Lancement des tests unitaires...'
-        export POSTGRES_HOST=localhost
+        export POSTGRES_HOST=db
         export POSTGRES_PORT=5432
         export POSTGRES_DB=certificatdb
         export POSTGRES_USER=postgres
