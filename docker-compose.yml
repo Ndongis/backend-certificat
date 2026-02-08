@@ -18,6 +18,7 @@ services:
       retries: 5
 
   backend:
+    mem_limit: 512m
     build: .
     command: >
       sh -c "python manage.py migrate &&
