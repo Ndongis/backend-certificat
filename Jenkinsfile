@@ -18,21 +18,21 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installation des dépendances...'
-                bat 'pip install -r requirements.txt'
+                sh 'pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo '🧪 Lancement des tests unitaires...'
-                bat 'python manage.py test'
+                sh 'python manage.py test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo '🐳 Construction de l’image Docker...'
-                bat 'docker build -t %IMAGE_NAME%:%IMAGE_TAG% .'
+                sh 'docker build -t %IMAGE_NAME%:%IMAGE_TAG% .'
             }
         }
 
