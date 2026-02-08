@@ -20,7 +20,7 @@ pipeline {
                 echo '📦 Installation des dépendances...'
                 sh """ python3 -m venv venv
                  . venv/bin/activate
-                  pip3 install --upgrade pip 
+                  pip3 install --upgrade pip3
                   pip3 install -r requirements.txt """
             }
         }
