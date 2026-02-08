@@ -28,8 +28,10 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo '🧪 Lancement des tests unitaires...'
-                 sh """ . venv/bin/activate
-                  python manage.py test """
+                 sh """ docker compose down || true
+                  docker compose up -d --build 
+                  docker compose exec backend python manage.py test
+                  docker compose down """
             }
         }
 
