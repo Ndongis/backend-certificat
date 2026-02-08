@@ -25,21 +25,21 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                
-                 sh """ 
-                 echo '🧪 Lancement des tests unitaires...'
-                $env:POSTGRES_HOST = "localhost"
-                $env:POSTGRES_PORT = "5432"
-                $env:POSTGRES_DB = "certificatdb"
-                $env:POSTGRES_USER = "postgres"
-                $env:POSTGRES_PASSWORD = "1234"
-                 . venv/bin/activate
-                 python manage.py test
-                """
-            }
-        }
+      stage('Run Tests') {
+    steps {
+        sh """
+        echo '🧪 Lancement des tests unitaires...'
+        export POSTGRES_HOST=localhost
+        export POSTGRES_PORT=5432
+        export POSTGRES_DB=certificatdb
+        export POSTGRES_USER=postgres
+        export POSTGRES_PASSWORD=1234
+        
+        . venv/bin/activate
+        python manage.py test
+        """
+    }
+}
 
         stage('Build Docker Image') {
             steps {
