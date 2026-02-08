@@ -34,7 +34,7 @@ pipeline {
          docker compose down || true
         docker compose up -d --build
         docker compose exec backend python manage.py migrate
-        docker compose exec backend python manage.py test --keepdb
+        docker compose exec backend python manage.py test --noinput
         docker compose down
         """
     }
