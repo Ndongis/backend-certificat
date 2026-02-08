@@ -28,7 +28,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo '🧪 Lancement des tests unitaires...'
-                 sh """ python manage.py test """
+                 sh """ python3 manage.py test """
             }
         }
 
