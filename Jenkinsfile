@@ -29,6 +29,7 @@ pipeline {
     steps {
   
         sh """
+        docker compose down --remove-orphans
          docker compose down || true
         docker compose up -d --build
         docker compose exec backend python manage.py migrate
