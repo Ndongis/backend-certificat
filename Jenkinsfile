@@ -18,14 +18,14 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installation des dépendances...'
-                sh 'pip install -r requirements.txt'
+                sh 'pip3 install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo '🧪 Lancement des tests unitaires...'
-                sh 'python manage.py test'
+                sh 'python3 manage.py test'
             }
         }
 
