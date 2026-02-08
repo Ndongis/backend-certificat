@@ -27,7 +27,7 @@ pipeline {
 
       stage('Run Tests') {
     steps {
-  
+  sh 'docker compose exec db psql -U postgres -c "DROP DATABASE IF EXISTS test_certificatdb;"'
         sh """
         fuser -k 8000/tcp || true
         docker compose down --remove-orphans
